@@ -1,0 +1,86 @@
+package world_service
+
+import (
+	"fmt"
+
+	"github.com/sirupsen/logrus"
+	"github.com/umarkotak/go-uler-tangga-api/internal/global_setting"
+	"github.com/umarkotak/go-uler-tangga-api/internal/model"
+	"github.com/umarkotak/go-uler-tangga-api/internal/singleton"
+)
+
+func JoinRoom(messageContract model.MessageContract) (model.ResponseContract, error) {
+	world := singleton.GetWorld()
+	myIdentity := messageContract.From
+
+	room, found := world.RoomMap[myIdentity.RoomID]
+
+	if !found {
+		room = model.Room{
+			ID:           myIdentity.RoomID,
+			MapConfig:    global_setting.MAP_1,
+			PlayerMap:    map[string]model.Player{},
+			PlayerCount:  0,
+			ActivePlayer: model.Player{},
+		}
+		world.RoomMap[room.ID] = room
+	}
+
+	player, playerFound := room.PlayerMap[myIdentity.ID]
+
+	if !playerFound {
+		room.PlayerCount += 1
+		myIdentity.RoomPlayerIndex = int(room.PlayerCount)
+		myIdentity.RoomPlayerIndexString = fmt.Sprintf("%v", room.PlayerCount)
+		player = model.Player{
+			Identity:       myIdentity,
+			Avatar:         model.Avatar{},
+			AvatarPosition: model.AvatarPosition{},
+			IndexPosition:  0,
+			MapPosition:    []model.Position{},
+			IsOnline:       true,
+			Status:         model.STATUS_HEALTHY,
+			CurrentState:   model.STATE_WAITING,
+			NextState:      model.STATE_PLAYING,
+			MoveAvailable:  0,
+			Items:          []model.Item{},
+		}
+		player.Init(room.MapConfig, global_setting.DEFAULT_AVATAR_CONFIGS)
+		logrus.Info("new player coming")
+	} else {
+		player.IsOnline = true
+		logrus.Info(player.CurrentState, player.NextState)
+	}
+
+	if room.PlayerCount == 1 {
+		player.CurrentState = model.STATE_PLAYING
+		player.NextState = model.STATE_ROLLING_NUMBER
+		room.ActivePlayer = player
+	}
+
+	room.PlayerMap[myIdentity.ID] = player
+	world.RoomMap[room.ID] = room
+
+	playerMapToRoomIndex(room.ID)
+
+	logrus.Info(player.CurrentState, player.NextState)
+
+	return model.ResponseContract{
+		ResponseKind:  "player_join_room",
+		BroadcastMode: model.BROADCAST_ROOM,
+		To:            model.Identity{},
+		Data:          world.RoomMap[room.ID],
+	}, nil
+}
+
+func playerMapToRoomIndex(roomID string) {
+	world := singleton.GetWorld()
+	room := world.RoomMap[roomID]
+
+	room.PlayerRoomIndexMap = map[string]model.Player{}
+	for _, player := range room.PlayerMap {
+		room.PlayerRoomIndexMap[player.Identity.RoomPlayerIndexString] = player
+	}
+
+	world.RoomMap[roomID] = room
+}
