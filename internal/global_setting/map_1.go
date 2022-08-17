@@ -6,8 +6,8 @@ import (
 
 var (
 	MAP_1 = model.MapConfig{
-		MinNumber: 9,
-		MaxNumber: 10,
+		MinNumber: 1,
+		MaxNumber: 7,
 		Size:      100,
 		Numbering: []int64{
 			1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
