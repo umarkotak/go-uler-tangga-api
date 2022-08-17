@@ -10,6 +10,8 @@ import (
 )
 
 func JoinRoom(messageContract model.MessageContract) (model.ResponseContract, error) {
+	logrus.Infof("Coming in: %v", messageContract.From.ID)
+
 	world := singleton.GetWorld()
 	myIdentity := messageContract.From
 
@@ -24,6 +26,8 @@ func JoinRoom(messageContract model.MessageContract) (model.ResponseContract, er
 			ActivePlayer: model.Player{},
 		}
 		world.RoomMap[room.ID] = room
+
+		logrus.Infof("Room creation success: %v", room.ID)
 	}
 
 	player, playerFound := room.PlayerMap[myIdentity.ID]
@@ -46,10 +50,8 @@ func JoinRoom(messageContract model.MessageContract) (model.ResponseContract, er
 			Items:          []model.Item{},
 		}
 		player.Init(room.MapConfig, global_setting.DEFAULT_AVATAR_CONFIGS)
-		logrus.Info("new player coming")
 	} else {
 		player.IsOnline = true
-		logrus.Info(player.CurrentState, player.NextState)
 	}
 
 	if room.PlayerCount == 1 {
@@ -62,8 +64,6 @@ func JoinRoom(messageContract model.MessageContract) (model.ResponseContract, er
 	world.RoomMap[room.ID] = room
 
 	playerMapToRoomIndex(room.ID)
-
-	logrus.Info(player.CurrentState, player.NextState)
 
 	return model.ResponseContract{
 		ResponseKind:  "player_join_room",
