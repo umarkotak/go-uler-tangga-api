@@ -11,9 +11,27 @@ func EndTurn(messageContract model.MessageContract) (model.ResponseContract, err
 	room, _ := world.RoomMap[myIdentity.RoomID]
 	player, _ := room.PlayerMap[myIdentity.ID]
 
-	player.IsOnline = false
-	player.CurrentState = model.STATE_WAITING
-	player.NextState = model.STATE_PLAYING
+	if room.ActivePlayer.Identity.ID != myIdentity.ID {
+		// logrus.Infof("%+v", room.ActivePlayer)
+		return model.RESP_UNAUTHORIZED, nil
+	}
+
+	if player.NextState != model.STATE_END_TURN {
+		// logrus.Infof("%+v", player)
+		return model.RESP_INVALID_STATE, nil
+	}
+
+	player.CurrentState = model.STATE_END_TURN
+	player.NextState = model.STATE_WAITING
+
+	// TODO: Implement map effect
+	movingCount := int64(0)
+	movingCount = player.CalculateCurrentPosition(room.MapConfig, movingCount)
+	moveResponse := MoveResponse{
+		Player: player,
+		Number: movingCount,
+	}
+	room.PlayerMap[player.Identity.ID] = player
 
 	nextRoomPlayerIndex := player.Identity.RoomPlayerIndex
 	nextRoomPlayerIndex += 1
@@ -30,14 +48,15 @@ func EndTurn(messageContract model.MessageContract) (model.ResponseContract, err
 		}
 	}
 
-	room.PlayerMap[player.Identity.ID] = player
+	moveResponse.NextPlayer = room.ActivePlayer
+
 	world.RoomMap[room.ID] = room
 	playerMapToRoomIndex(room.ID)
 
 	return model.ResponseContract{
-		ResponseKind:  "player_leave_room",
+		ResponseKind:  "player_end_turn",
 		BroadcastMode: model.BROADCAST_ROOM,
 		To:            model.Identity{},
-		Data:          world.RoomMap[room.ID],
+		Data:          moveResponse,
 	}, nil
 }

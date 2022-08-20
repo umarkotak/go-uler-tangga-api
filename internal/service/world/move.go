@@ -30,7 +30,7 @@ func Move(messageContract model.MessageContract) (model.ResponseContract, error)
 	movingCount := player.MoveAvailable
 
 	player.CurrentState = model.STATE_MOVING
-	player.NextState = model.STATE_WAITING
+	player.NextState = model.STATE_END_TURN
 	player.MoveAvailable = 0
 	movingCount = player.CalculateCurrentPosition(room.MapConfig, movingCount)
 	moveResponse := MoveResponse{
@@ -38,23 +38,6 @@ func Move(messageContract model.MessageContract) (model.ResponseContract, error)
 		Number: movingCount,
 	}
 	room.PlayerMap[player.Identity.ID] = player
-
-	nextRoomPlayerIndex := player.Identity.RoomPlayerIndex
-	nextRoomPlayerIndex += 1
-	if nextRoomPlayerIndex > int(room.PlayerCount) {
-		nextRoomPlayerIndex = 1
-	}
-	for _, nextPlayer := range room.PlayerMap {
-		if nextPlayer.Identity.RoomPlayerIndex == int(nextRoomPlayerIndex) {
-			nextPlayer.CurrentState = model.STATE_PLAYING
-			nextPlayer.NextState = model.STATE_ROLLING_NUMBER
-			room.PlayerMap[nextPlayer.Identity.ID] = nextPlayer
-			room.ActivePlayer = nextPlayer
-			break
-		}
-	}
-
-	moveResponse.NextPlayer = room.ActivePlayer
 
 	world.RoomMap[room.ID] = room
 	playerMapToRoomIndex(room.ID)
