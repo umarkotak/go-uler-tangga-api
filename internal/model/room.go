@@ -20,6 +20,16 @@ type (
 	}
 
 	FieldEffect struct {
-		BenefitType string `json:"benefit_type"`
+		FieldNumber       int64            `json:"field_number"`
+		FieldNumberString string           `json:"field_number_string"`
+		BenefitType       string           `json:"benefit_type"`       // [player_move]
+		EffectPlayerMove  EffectPlayerMove `json:"effect_player_move"` //
+	}
+
+	EffectPlayerMove struct {
+		Direction      string `json:"direction"`
+		MoveCount      int64  `json:"move_count"`
+		FromCoordinate int64  `json:"from_coordinate"`
+		ToCoordinate   int64  `json:"to_coordinate"`
 	}
 )

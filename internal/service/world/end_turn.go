@@ -1,6 +1,8 @@
 package world_service
 
 import (
+	"fmt"
+
 	"github.com/umarkotak/go-uler-tangga-api/internal/model"
 	"github.com/umarkotak/go-uler-tangga-api/internal/singleton"
 )
@@ -26,6 +28,15 @@ func EndTurn(messageContract model.MessageContract) (model.ResponseContract, err
 
 	// TODO: Implement map effect
 	movingCount := int64(0)
+
+	playerFieldNumber := room.MapConfig.Numbering[room.MapConfig.Direction[player.IndexPosition]]
+	fieldEffect, effectFound := room.MapConfig.FieldEffect[fmt.Sprintf("%v", playerFieldNumber)]
+	if effectFound {
+		if fieldEffect.BenefitType == "player_move" {
+			movingCount = fieldEffect.EffectPlayerMove.MoveCount
+		}
+	}
+
 	movingCount = player.CalculateCurrentPosition(room.MapConfig, movingCount)
 	moveResponse := MoveResponse{
 		Player: player,

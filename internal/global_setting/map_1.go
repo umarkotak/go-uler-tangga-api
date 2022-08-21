@@ -6,8 +6,8 @@ import (
 
 var (
 	MAP_1 = model.MapConfig{
-		MinNumber: 1,
-		MaxNumber: 7,
+		MinNumber: 2,
+		MaxNumber: 3,
 		Size:      100,
 		Numbering: []int64{
 			1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
@@ -33,6 +33,18 @@ var (
 			80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
 			99, 98, 97, 96, 95, 94, 93, 92, 91, 90,
 		},
-		FieldEffect: map[string]model.FieldEffect{},
+		FieldEffect: map[string]model.FieldEffect{
+			"3": {
+				FieldNumber:       3,
+				FieldNumberString: "3",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "up",
+					MoveCount:      17,
+					FromCoordinate: 3,
+					ToCoordinate:   20,
+				},
+			},
+		},
 	}
 )
