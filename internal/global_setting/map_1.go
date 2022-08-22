@@ -45,6 +45,127 @@ var (
 					ToCoordinate:   20,
 				},
 			},
+			"6": {
+				FieldNumber:       6,
+				FieldNumberString: "6",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "up",
+					MoveCount:      8,
+					FromCoordinate: 6,
+					ToCoordinate:   14,
+				},
+			},
+			"8": {
+				FieldNumber:       8,
+				FieldNumberString: "8",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "down",
+					MoveCount:      -4,
+					FromCoordinate: 8,
+					ToCoordinate:   4,
+				},
+			},
+			"11": {
+				FieldNumber:       11,
+				FieldNumberString: "11",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "up",
+					MoveCount:      17,
+					FromCoordinate: 11,
+					ToCoordinate:   28,
+				},
+			},
+			"15": {
+				FieldNumber:       15,
+				FieldNumberString: "15",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "up",
+					MoveCount:      19,
+					FromCoordinate: 15,
+					ToCoordinate:   34,
+				},
+			},
+			"18": {
+				FieldNumber:       18,
+				FieldNumberString: "18",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "down",
+					MoveCount:      -17,
+					FromCoordinate: 18,
+					ToCoordinate:   1,
+				},
+			},
+			"22": {
+				FieldNumber:       22,
+				FieldNumberString: "22",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "up",
+					MoveCount:      15,
+					FromCoordinate: 22,
+					ToCoordinate:   37,
+				},
+			},
+			"26": {
+				FieldNumber:       26,
+				FieldNumberString: "26",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "down",
+					MoveCount:      -16,
+					FromCoordinate: 26,
+					ToCoordinate:   10,
+				},
+			},
+			"38": {
+				FieldNumber:       38,
+				FieldNumberString: "38",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "up",
+					MoveCount:      21,
+					FromCoordinate: 38,
+					ToCoordinate:   59,
+				},
+			},
+			"39": {
+				FieldNumber:       39,
+				FieldNumberString: "39",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "down",
+					MoveCount:      -34,
+					FromCoordinate: 39,
+					ToCoordinate:   5,
+				},
+			},
+			"49": {
+				FieldNumber:       49,
+				FieldNumberString: "49",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "up",
+					MoveCount:      18,
+					FromCoordinate: 49,
+					ToCoordinate:   67,
+				},
+			},
+			"51": {
+				FieldNumber:       51,
+				FieldNumberString: "51",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "down",
+					MoveCount:      -45,
+					FromCoordinate: 51,
+					ToCoordinate:   6,
+				},
+			},
 		},
 	}
 )
