@@ -3,14 +3,11 @@ package world_service
 import (
 	"fmt"
 
-	"github.com/sirupsen/logrus"
 	"github.com/umarkotak/go-uler-tangga-api/internal/model"
 	"github.com/umarkotak/go-uler-tangga-api/internal/singleton"
 )
 
 func LeaveRoom(messageContract model.MessageContract) (model.ResponseContract, error) {
-	logrus.Infof("Leaving in: %v", messageContract.From.ID)
-
 	world := singleton.GetWorld()
 	myIdentity := messageContract.From
 	room, _ := world.RoomMap[myIdentity.RoomID]

@@ -2,6 +2,8 @@ package world_service
 
 import (
 	"fmt"
+	"math/rand"
+	"time"
 
 	"github.com/umarkotak/go-uler-tangga-api/internal/model"
 	"github.com/umarkotak/go-uler-tangga-api/internal/singleton"
@@ -28,19 +30,34 @@ func EndTurn(messageContract model.MessageContract) (model.ResponseContract, err
 
 	// TODO: Implement map effect for receiving reward
 	movingCount := int64(0)
+	isFoundItem := false
 
 	playerFieldNumber := room.MapConfig.Numbering[room.MapConfig.Direction[player.IndexPosition]]
 	fieldEffect, effectFound := room.MapConfig.FieldEffect[fmt.Sprintf("%v", playerFieldNumber)]
 	if effectFound {
 		if fieldEffect.BenefitType == "player_move" {
 			movingCount = fieldEffect.EffectPlayerMove.MoveCount
+
+		} else if fieldEffect.BenefitType == "consumable_item" {
+			lenList := len(fieldEffect.EffectConsumableItems)
+			if lenList > 0 {
+				randomIndex := rand.Intn(lenList)
+				effectConsumableItem := fieldEffect.EffectConsumableItems[randomIndex]
+
+				player.Items = append(player.Items, model.Item{
+					RandomID:             fmt.Sprint(time.Now().UnixNano()),
+					EffectConsumableItem: effectConsumableItem,
+				})
+				isFoundItem = true
+			}
 		}
 	}
 
 	movingCount = player.CalculateCurrentPosition(room.MapConfig, movingCount)
 	moveResponse := MoveResponse{
-		Player: player,
-		Number: movingCount,
+		Player:      player,
+		Number:      movingCount,
+		IsFoundItem: isFoundItem,
 	}
 	room.PlayerMap[player.Identity.ID] = player
 

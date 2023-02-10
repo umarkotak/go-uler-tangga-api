@@ -9,5 +9,7 @@ type (
 	}
 
 	MessagePayload struct {
+		ItemRandomID     string `json:"item_random_id"`
+		ItemTargetUserID string `json:"item_target_user_id"`
 	}
 )

@@ -8,9 +8,10 @@ import (
 )
 
 type MoveResponse struct {
-	Player     model.Player `json:"player"`
-	NextPlayer model.Player `json:"next_player"`
-	Number     int64        `json:"number"`
+	Player      model.Player `json:"player"`
+	NextPlayer  model.Player `json:"next_player"`
+	Number      int64        `json:"number"`
+	IsFoundItem bool         `json:"is_found_item"`
 }
 
 func Move(messageContract model.MessageContract) (model.ResponseContract, error) {

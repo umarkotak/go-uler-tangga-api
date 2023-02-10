@@ -79,7 +79,6 @@ func (h *Hub) messageRouter(rawMessage []byte) {
 	}
 
 	var responseContract model.ResponseContract
-
 	switch messageContract.Action {
 	case "player_join_room":
 		responseContract, err = world_service.JoinRoom(messageContract)
@@ -91,6 +90,10 @@ func (h *Hub) messageRouter(rawMessage []byte) {
 		responseContract, err = world_service.LeaveRoom(messageContract)
 	case "player_end_turn":
 		responseContract, err = world_service.EndTurn(messageContract)
+	case "player_use_item":
+		responseContract, err = world_service.UseItem(messageContract)
+	case "get_room_data_for_self":
+		responseContract, err = world_service.GetRoomData(messageContract)
 	case "admin_move_player":
 	case "admin_raw_broadcast":
 	default:

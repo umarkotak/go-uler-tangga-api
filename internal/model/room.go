@@ -25,11 +25,11 @@ type (
 	}
 
 	FieldEffect struct {
-		FieldNumber       int64            `json:"field_number"`
-		FieldNumberString string           `json:"field_number_string"`
-		BenefitType       string           `json:"benefit_type"`       // [player_move, boost_item]
-		EffectPlayerMove  EffectPlayerMove `json:"effect_player_move"` //
-		EffectBoostItem   EffectBoostItem  `json:"effect_boost_item"`
+		FieldNumber           int64                  `json:"field_number"`
+		FieldNumberString     string                 `json:"field_number_string"`
+		BenefitType           string                 `json:"benefit_type"`            // [player_move, consumable_item]
+		EffectPlayerMove      EffectPlayerMove       `json:"effect_player_move"`      //
+		EffectConsumableItems []EffectConsumableItem `json:"effect_consumable_items"` // get random item from the array
 	}
 
 	EffectPlayerMove struct {
@@ -39,7 +39,13 @@ type (
 		ToCoordinate   int64  `json:"to_coordinate"`
 	}
 
-	EffectBoostItem struct{}
+	EffectConsumableItem struct {
+		Name         string          `json:"name"`
+		UsePeriodMap map[string]bool `json:"use_period"`  // [before_rolling_number, before_moving, before_end_turn]
+		EffectType   string          `json:"effect_type"` // [move_n_step, teleport_to]
+		Target       string          `json:"target"`      // [self, other, all]
+		Value        int64           `json:"value"`
+	}
 
 	MoveLog struct {
 		Log       string    `json:"log"`

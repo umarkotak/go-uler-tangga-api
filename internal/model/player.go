@@ -44,8 +44,8 @@ type (
 	}
 
 	Item struct {
-		RandomID   string `json:"random_id"`
-		EffectType string `json:"effect_type"`
+		RandomID             string               `json:"random_id"`
+		EffectConsumableItem EffectConsumableItem `json:"effect_consumable_item"`
 	}
 )
 

@@ -37,10 +37,10 @@ var (
 		},
 		FieldEffect: map[string]model.FieldEffect{
 			"2": {
-				FieldNumber:       2,
-				FieldNumberString: "2",
-				BenefitType:       "boost_item",
-				EffectBoostItem:   model.EffectBoostItem{},
+				FieldNumber:           2,
+				FieldNumberString:     "2",
+				BenefitType:           "consumable_item",
+				EffectConsumableItems: []model.EffectConsumableItem{CONSUMABLE_MAJU_5_LANGKAH},
 			},
 			"3": {
 				FieldNumber:       3,
@@ -53,6 +53,18 @@ var (
 					ToCoordinate:   20,
 				},
 			},
+			"4": {
+				FieldNumber:           4,
+				FieldNumberString:     "4",
+				BenefitType:           "consumable_item",
+				EffectConsumableItems: EffectConsumableItemsSet1,
+			},
+			"5": {
+				FieldNumber:           5,
+				FieldNumberString:     "5",
+				BenefitType:           "consumable_item",
+				EffectConsumableItems: EffectConsumableItemsSet1,
+			},
 			"6": {
 				FieldNumber:       6,
 				FieldNumberString: "6",
@@ -63,6 +75,12 @@ var (
 					FromCoordinate: 6,
 					ToCoordinate:   14,
 				},
+			},
+			"7": {
+				FieldNumber:           7,
+				FieldNumberString:     "7",
+				BenefitType:           "consumable_item",
+				EffectConsumableItems: EffectConsumableItemsSet1,
 			},
 			"8": {
 				FieldNumber:       8,

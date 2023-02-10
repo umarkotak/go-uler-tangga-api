@@ -10,8 +10,6 @@ import (
 )
 
 func JoinRoom(messageContract model.MessageContract) (model.ResponseContract, error) {
-	logrus.Infof("Coming in: %v", messageContract.From.ID)
-
 	world := singleton.GetWorld()
 	myIdentity := messageContract.From
 
