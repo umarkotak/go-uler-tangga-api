@@ -1,6 +1,7 @@
 package world_service
 
 import (
+	"fmt"
 	"math/rand"
 
 	"github.com/umarkotak/go-uler-tangga-api/internal/model"
@@ -41,6 +42,8 @@ func RollNumber(messageContract model.MessageContract) (model.ResponseContract, 
 	room.PlayerMap[player.Identity.ID] = player
 	world.RoomMap[room.ID] = room
 	playerMapToRoomIndex(room.ID)
+
+	room.WriteMoveLog(fmt.Sprintf("%v mendapatkan angka %v", myIdentity.ID, rollNumberResponse.Player.MoveAvailable))
 
 	return model.ResponseContract{
 		ResponseKind:  "player_roll_number",

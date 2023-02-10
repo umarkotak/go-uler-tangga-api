@@ -1,6 +1,8 @@
 package world_service
 
 import (
+	"fmt"
+
 	"github.com/umarkotak/go-uler-tangga-api/internal/model"
 	"github.com/umarkotak/go-uler-tangga-api/internal/singleton"
 )
@@ -28,6 +30,7 @@ func Move(messageContract model.MessageContract) (model.ResponseContract, error)
 	}
 
 	movingCount := player.MoveAvailable
+	initialMovingCount := movingCount
 
 	player.CurrentState = model.STATE_MOVING
 	player.NextState = model.STATE_END_TURN
@@ -39,6 +42,7 @@ func Move(messageContract model.MessageContract) (model.ResponseContract, error)
 	}
 	room.PlayerMap[player.Identity.ID] = player
 
+	room.WriteMoveLog(fmt.Sprintf("%v jalan %v langkah", myIdentity.ID, initialMovingCount))
 	world.RoomMap[room.ID] = room
 	playerMapToRoomIndex(room.ID)
 

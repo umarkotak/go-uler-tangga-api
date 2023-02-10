@@ -6,9 +6,11 @@ import (
 
 var (
 	MAP_1 = model.MapConfig{
+		Title:     "Default",
 		MinNumber: 1,
 		MaxNumber: 7,
 		Size:      100,
+		MaxPlayer: 5,
 		Numbering: []int64{
 			1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 			20, 19, 18, 17, 16, 15, 14, 13, 12, 11,
@@ -34,6 +36,12 @@ var (
 			99, 98, 97, 96, 95, 94, 93, 92, 91, 90,
 		},
 		FieldEffect: map[string]model.FieldEffect{
+			"2": {
+				FieldNumber:       2,
+				FieldNumberString: "2",
+				BenefitType:       "boost_item",
+				EffectBoostItem:   model.EffectBoostItem{},
+			},
 			"3": {
 				FieldNumber:       3,
 				FieldNumberString: "3",
@@ -61,10 +69,10 @@ var (
 				FieldNumberString: "8",
 				BenefitType:       "player_move",
 				EffectPlayerMove: model.EffectPlayerMove{
-					Direction:      "down",
-					MoveCount:      -4,
+					Direction:      "up",
+					MoveCount:      4,
 					FromCoordinate: 8,
-					ToCoordinate:   4,
+					ToCoordinate:   12,
 				},
 			},
 			"11": {
@@ -161,9 +169,9 @@ var (
 				BenefitType:       "player_move",
 				EffectPlayerMove: model.EffectPlayerMove{
 					Direction:      "down",
-					MoveCount:      -45,
+					MoveCount:      -44,
 					FromCoordinate: 51,
-					ToCoordinate:   6,
+					ToCoordinate:   7,
 				},
 			},
 		},

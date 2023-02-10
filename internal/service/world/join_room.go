@@ -24,6 +24,7 @@ func JoinRoom(messageContract model.MessageContract) (model.ResponseContract, er
 			PlayerMap:    map[string]model.Player{},
 			PlayerCount:  0,
 			ActivePlayer: model.Player{},
+			MoveLogs:     []model.MoveLog{},
 		}
 		world.RoomMap[room.ID] = room
 
@@ -33,6 +34,11 @@ func JoinRoom(messageContract model.MessageContract) (model.ResponseContract, er
 	player, playerFound := room.PlayerMap[myIdentity.ID]
 
 	if !playerFound {
+		if room.PlayerCount >= room.MapConfig.MaxPlayer {
+			err := fmt.Errorf("Room is full")
+			return model.RESP_ROOM_IS_FULL, err
+		}
+
 		room.PlayerCount += 1
 		myIdentity.RoomPlayerIndex = int(room.PlayerCount)
 		myIdentity.RoomPlayerIndexString = fmt.Sprintf("%v", room.PlayerCount)
@@ -50,8 +56,11 @@ func JoinRoom(messageContract model.MessageContract) (model.ResponseContract, er
 			Items:          []model.Item{},
 		}
 		player.Init(room.MapConfig, global_setting.DEFAULT_AVATAR_CONFIGS)
+		room.WriteMoveLog(fmt.Sprintf("%v bergabung ke dalam permainan", myIdentity.ID))
+
 	} else {
 		player.IsOnline = true
+		room.WriteMoveLog(fmt.Sprintf("%v masuk kembali", myIdentity.ID))
 	}
 
 	if room.PlayerCount == 1 {

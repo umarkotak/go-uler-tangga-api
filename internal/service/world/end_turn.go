@@ -26,7 +26,7 @@ func EndTurn(messageContract model.MessageContract) (model.ResponseContract, err
 	player.CurrentState = model.STATE_END_TURN
 	player.NextState = model.STATE_WAITING
 
-	// TODO: Implement map effect
+	// TODO: Implement map effect for receiving reward
 	movingCount := int64(0)
 
 	playerFieldNumber := room.MapConfig.Numbering[room.MapConfig.Direction[player.IndexPosition]]
@@ -43,6 +43,14 @@ func EndTurn(messageContract model.MessageContract) (model.ResponseContract, err
 		Number: movingCount,
 	}
 	room.PlayerMap[player.Identity.ID] = player
+
+	if movingCount != 0 {
+		direction := "maju"
+		if movingCount < 0 {
+			direction = "mundur"
+		}
+		room.WriteMoveLog(fmt.Sprintf("%v terkena efek %v %v langkah", myIdentity.ID, direction, movingCount))
+	}
 
 	nextRoomPlayerIndex := player.Identity.RoomPlayerIndex
 	nextRoomPlayerIndex += 1
@@ -63,6 +71,8 @@ func EndTurn(messageContract model.MessageContract) (model.ResponseContract, err
 
 	world.RoomMap[room.ID] = room
 	playerMapToRoomIndex(room.ID)
+
+	room.WriteMoveLog(fmt.Sprintf("%v menyelesaikan giliran", myIdentity.ID))
 
 	return model.ResponseContract{
 		ResponseKind:  "player_end_turn",

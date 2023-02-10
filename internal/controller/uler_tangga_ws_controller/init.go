@@ -1,4 +1,4 @@
-package uler_tangga_controller
+package uler_tangga_ws_controller
 
 import (
 	"net/http"

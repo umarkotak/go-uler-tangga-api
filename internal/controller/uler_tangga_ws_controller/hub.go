@@ -1,4 +1,4 @@
-package uler_tangga_controller
+package uler_tangga_ws_controller
 
 import (
 	"encoding/json"
@@ -9,20 +9,22 @@ import (
 )
 
 type Hub struct {
-	clients    map[*Client]bool
-	clientMap  map[string]*Client
-	broadcast  chan []byte
-	register   chan *Client
-	unregister chan *Client
+	clients       map[*Client]bool
+	clientMap     map[string]*Client
+	clientRoomMap map[string]map[string]*Client
+	broadcast     chan []byte
+	register      chan *Client
+	unregister    chan *Client
 }
 
 func newHub() *Hub {
 	return &Hub{
-		broadcast:  make(chan []byte),
-		register:   make(chan *Client),
-		unregister: make(chan *Client),
-		clients:    make(map[*Client]bool),
-		clientMap:  map[string]*Client{},
+		broadcast:     make(chan []byte),
+		register:      make(chan *Client),
+		unregister:    make(chan *Client),
+		clients:       make(map[*Client]bool),
+		clientMap:     map[string]*Client{},
+		clientRoomMap: map[string]map[string]*Client{},
 	}
 }
 
@@ -32,6 +34,11 @@ func (h *Hub) run() {
 		case client := <-h.register:
 			h.clients[client] = true
 			h.clientMap[client.identiy.ID] = client
+			_, ok := h.clientRoomMap[client.identiy.RoomID]
+			if !ok {
+				h.clientRoomMap[client.identiy.RoomID] = map[string]*Client{}
+			}
+			h.clientRoomMap[client.identiy.RoomID][client.identiy.ID] = client
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
 				h.justCloseClient(client)
@@ -57,6 +64,12 @@ func (h *Hub) justCloseClient(c *Client) {
 }
 
 func (h *Hub) messageRouter(rawMessage []byte) {
+	defer func() {
+		if err := recover(); err != nil {
+			logrus.Error("Recovered. Error: ", err)
+		}
+	}()
+
 	messageContract := model.MessageContract{}
 
 	err := json.Unmarshal(rawMessage, &messageContract)
@@ -101,12 +114,12 @@ func (h *Hub) messageRouter(rawMessage []byte) {
 
 	switch responseContract.BroadcastMode {
 	case model.BROADCAST_ALL:
-	case model.BROADCAST_ONE:
+
+	case model.BROADCAST_DIRECT_TO:
+		h.clientRoomMap[responseContract.From.RoomID][responseContract.To.ID].send <- responseByte
 	case model.BROADCAST_ROOM:
-		for _, targetClient := range h.clientMap {
-			if targetClient.identiy.RoomID == messageContract.From.RoomID {
-				targetClient.send <- responseByte
-			}
+		for _, targetClient := range h.clientRoomMap[messageContract.From.RoomID] {
+			targetClient.send <- responseByte
 		}
 	case model.BROADCAST_SELF:
 		targetClient := h.clientMap[messageContract.From.ID]

@@ -41,6 +41,7 @@ func LeaveRoom(messageContract model.MessageContract) (model.ResponseContract, e
 	}
 
 	room.PlayerMap[player.Identity.ID] = player
+	room.WriteMoveLog(fmt.Sprintf("%v keluar", myIdentity.ID))
 	world.RoomMap[room.ID] = room
 	playerMapToRoomIndex(room.ID)
 
