@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"math/rand"
+	"time"
+)
 
 type (
 	Room struct {
@@ -11,12 +14,14 @@ type (
 		PlayerCount        int64             `json:"player_count"`
 		ActivePlayer       Player            `json:"active_player"`
 		MoveLogs           []MoveLog         `json:"move_logs"`
+		Winners            []string          `json:"winners"`
 	}
 
 	MapConfig struct {
 		Title       string                 `json:"title"`
 		MinNumber   int64                  `json:"min_number"`
 		MaxNumber   int64                  `json:"max_number"`
+		DiceNumbers []int64                `json:"dice_numbers"`
 		Size        int64                  `json:"size"`
 		Numbering   []int64                `json:"numbering"`
 		Direction   []int64                `json:"direction"`
@@ -41,6 +46,7 @@ type (
 
 	EffectConsumableItem struct {
 		Name         string          `json:"name"`
+		Description  string          `json:"description"`
 		UsePeriodMap map[string]bool `json:"use_period"`  // [before_rolling_number, before_moving, before_end_turn]
 		EffectType   string          `json:"effect_type"` // [move_n_step, teleport_to]
 		Target       string          `json:"target"`      // [self, other, all]
@@ -58,4 +64,9 @@ func (r *Room) WriteMoveLog(log string) {
 		Log:       log,
 		Timestamp: time.Now(),
 	})
+}
+
+func (r *Room) GetRandomNumber() int64 {
+	randomIndex := rand.Intn(len(r.MapConfig.DiceNumbers))
+	return r.MapConfig.DiceNumbers[randomIndex]
 }

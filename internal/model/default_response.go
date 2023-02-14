@@ -2,37 +2,74 @@ package model
 
 var (
 	RESP_UNAUTHORIZED = ResponseContract{
-		ResponseKind:  "err_unauthorized",
+		ResponseKind:  "process_error",
 		BroadcastMode: BROADCAST_SELF,
+		ServerError: ServerError{
+			Code:    "err_unauthorized",
+			Message: "tidak ter authorisasi",
+		},
 	}
 
 	RESP_NOT_YOUR_TURN = ResponseContract{
-		ResponseKind:  "err_not_your_turn",
+		ResponseKind:  "process_error",
 		BroadcastMode: BROADCAST_SELF,
+		ServerError: ServerError{
+			Code:    "err_not_your_turn",
+			Message: "bukan giliran mu",
+		},
 	}
 
 	RESP_INVALID_STATE = ResponseContract{
-		ResponseKind:  "err_invalid_state",
+		ResponseKind:  "process_error",
 		BroadcastMode: BROADCAST_SELF,
+		ServerError: ServerError{
+			Code:    "err_invalid_state",
+			Message: "state salah",
+		},
 	}
 
 	RESP_MISSING_ITEM_RANDOM_ID = ResponseContract{
-		ResponseKind:  "err_missing_item_random_id",
+		ResponseKind: "	",
 		BroadcastMode: BROADCAST_SELF,
+		ServerError: ServerError{
+			Code:    "err_missing_item_random_id",
+			Message: "item belum dipilih",
+		},
 	}
 
 	RESP_ITEM_NOT_FOUND = ResponseContract{
-		ResponseKind:  "err_item_not_found",
+		ResponseKind:  "process_error",
 		BroadcastMode: BROADCAST_SELF,
+		ServerError: ServerError{
+			Code:    "err_item_not_found",
+			Message: "item tidak dapat ditemukan",
+		},
 	}
 
 	RESP_ROOM_IS_FULL = ResponseContract{
-		ResponseKind:  "err_room_is_full",
+		ResponseKind:  "process_error",
 		BroadcastMode: BROADCAST_SELF,
+		ServerError: ServerError{
+			Code:    "err_room_is_full",
+			Message: "room penuh",
+		},
 	}
 
 	RESP_BAD_REQUEST = ResponseContract{
-		ResponseKind:  "err_bad_request",
+		ResponseKind:  "process_error",
 		BroadcastMode: BROADCAST_SELF,
+		ServerError: ServerError{
+			Code:    "err_bad_request",
+			Message: "bad request",
+		},
+	}
+
+	RESP_MISSING_TARGET_USER = ResponseContract{
+		ResponseKind:  "process_error",
+		BroadcastMode: BROADCAST_SELF,
+		ServerError: ServerError{
+			Code:    "err_missing_target_user",
+			Message: "target user belum dipilih",
+		},
 	}
 )

@@ -2,7 +2,6 @@ package world_service
 
 import (
 	"fmt"
-	"math/rand"
 
 	"github.com/umarkotak/go-uler-tangga-api/internal/model"
 	"github.com/umarkotak/go-uler-tangga-api/internal/singleton"
@@ -29,7 +28,7 @@ func RollNumber(messageContract model.MessageContract) (model.ResponseContract, 
 		return model.RESP_INVALID_STATE, nil
 	}
 
-	number := int64(rand.Intn(int(room.MapConfig.MaxNumber-room.MapConfig.MinNumber)) + int(room.MapConfig.MinNumber))
+	number := room.GetRandomNumber()
 
 	player.CurrentState = model.STATE_ROLLING_NUMBER
 	player.NextState = model.STATE_MOVING

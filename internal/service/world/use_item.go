@@ -11,6 +11,7 @@ import (
 type UseItemResponse struct {
 	ItemEffectType string       `json:"item_effect_type"`
 	MoveResponse   MoveResponse `json:"move_response"`
+	PlayerItems    []model.Item `json:"player_items"`
 }
 
 func UseItem(messageContract model.MessageContract) (model.ResponseContract, error) {
@@ -29,10 +30,12 @@ func UseItem(messageContract model.MessageContract) (model.ResponseContract, err
 
 	item := model.Item{}
 	consumableItem := model.EffectConsumableItem{}
-	for _, searchItem := range player.Items {
+	var itemIdx int
+	for idx, searchItem := range player.Items {
 		if searchItem.RandomID == messageContract.Payload.ItemRandomID {
 			item = searchItem
 			consumableItem = item.EffectConsumableItem
+			itemIdx = idx
 			break
 		}
 	}
@@ -52,8 +55,14 @@ func UseItem(messageContract model.MessageContract) (model.ResponseContract, err
 	}
 
 	var targetPlayer model.Player
+	var ok bool
 	if consumableItem.Target == "self" {
 		targetPlayer = player
+	} else if consumableItem.Target == "all" {
+		targetPlayer, ok = room.PlayerMap[messageContract.Payload.ItemTargetUserID]
+		if !ok {
+			return model.RESP_MISSING_TARGET_USER, nil
+		}
 	} else {
 		return model.RESP_BAD_REQUEST, nil
 	}
@@ -62,16 +71,33 @@ func UseItem(messageContract model.MessageContract) (model.ResponseContract, err
 		ItemEffectType: consumableItem.EffectType,
 	}
 	if consumableItem.EffectType == "move_n_step" {
+		// Remove used item logic
+		tmpPlayer := room.PlayerMap[player.Identity.ID]
+		tmpPlayer.Items = removeItem(tmpPlayer.Items, itemIdx)
+		room.PlayerMap[player.Identity.ID] = tmpPlayer
+
 		movingCount := consumableItem.Value
-		movingCount = targetPlayer.CalculateCurrentPosition(room.MapConfig, movingCount)
+		movingCount, _ = targetPlayer.CalculateCurrentPosition(room.MapConfig, movingCount)
 
 		useItemResponse.MoveResponse = MoveResponse{
 			Player: targetPlayer,
 			Number: movingCount,
 		}
+		if targetPlayer.CheckIsWinning(room.MapConfig) {
+			useItemResponse.MoveResponse.Winner = targetPlayer.Identity.ID
+			targetPlayer.Winning = true
+			room.Winners = append(room.Winners, useItemResponse.MoveResponse.Winner)
+			targetPlayer.WinningPosition = int64(len(room.Winners))
+		}
+		useItemResponse.PlayerItems = room.PlayerMap[player.Identity.ID].Items
+
 		room.PlayerMap[targetPlayer.Identity.ID] = targetPlayer
 
-		room.WriteMoveLog(fmt.Sprintf("%v jalan %v langkah", targetPlayer.Identity.ID, consumableItem.Value))
+		if consumableItem.Target == "self" {
+			room.WriteMoveLog(fmt.Sprintf("%v menggunakan %v", player.Identity.ID, consumableItem.Name))
+		} else if consumableItem.Target == "all" {
+			room.WriteMoveLog(fmt.Sprintf("%v menggunakan %v kepada %v", player.Identity.ID, consumableItem.Name, targetPlayer.Identity.ID))
+		}
 	}
 
 	world.RoomMap[room.ID] = room
@@ -83,4 +109,8 @@ func UseItem(messageContract model.MessageContract) (model.ResponseContract, err
 		To:            model.Identity{},
 		Data:          useItemResponse,
 	}, nil
+}
+
+func removeItem(slice []model.Item, idx int) []model.Item {
+	return append(slice[:idx], slice[idx+1:]...)
 }

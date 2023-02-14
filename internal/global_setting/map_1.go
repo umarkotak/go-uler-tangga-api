@@ -6,11 +6,12 @@ import (
 
 var (
 	MAP_1 = model.MapConfig{
-		Title:     "Default",
-		MinNumber: 1,
-		MaxNumber: 7,
-		Size:      100,
-		MaxPlayer: 5,
+		Title:       "Default",
+		MinNumber:   1,
+		MaxNumber:   6,
+		DiceNumbers: []int64{1, 2, 3, 4, 5, 6},
+		Size:        100,
+		MaxPlayer:   5,
 		Numbering: []int64{
 			1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 			20, 19, 18, 17, 16, 15, 14, 13, 12, 11,
@@ -40,7 +41,7 @@ var (
 				FieldNumber:           2,
 				FieldNumberString:     "2",
 				BenefitType:           "consumable_item",
-				EffectConsumableItems: []model.EffectConsumableItem{CONSUMABLE_MAJU_5_LANGKAH},
+				EffectConsumableItems: []model.EffectConsumableItem{CONSUMABLE_MAJU_5_LANGKAH_SELF},
 			},
 			"3": {
 				FieldNumber:       3,
@@ -148,6 +149,18 @@ var (
 					ToCoordinate:   10,
 				},
 			},
+			"35": {
+				FieldNumber:           35,
+				FieldNumberString:     "35",
+				BenefitType:           "consumable_item",
+				EffectConsumableItems: EffectConsumableItemsSet1,
+			},
+			"36": {
+				FieldNumber:           36,
+				FieldNumberString:     "36",
+				BenefitType:           "consumable_item",
+				EffectConsumableItems: EffectConsumableItemsSet1,
+			},
 			"38": {
 				FieldNumber:       38,
 				FieldNumberString: "38",
@@ -170,6 +183,17 @@ var (
 					ToCoordinate:   5,
 				},
 			},
+			"45": {
+				FieldNumber:       45,
+				FieldNumberString: "45",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "down",
+					MoveCount:      -20,
+					FromCoordinate: 45,
+					ToCoordinate:   25,
+				},
+			},
 			"49": {
 				FieldNumber:       49,
 				FieldNumberString: "49",
@@ -190,6 +214,74 @@ var (
 					MoveCount:      -44,
 					FromCoordinate: 51,
 					ToCoordinate:   7,
+				},
+			},
+			"76": {
+				FieldNumber:           76,
+				FieldNumberString:     "76",
+				BenefitType:           "consumable_item",
+				EffectConsumableItems: EffectConsumableItemsSet1,
+			},
+			"77": {
+				FieldNumber:           77,
+				FieldNumberString:     "77",
+				BenefitType:           "consumable_item",
+				EffectConsumableItems: EffectConsumableItemsSet1,
+			},
+			"78": {
+				FieldNumber:           78,
+				FieldNumberString:     "78",
+				BenefitType:           "consumable_item",
+				EffectConsumableItems: EffectConsumableItemsSet1,
+			},
+			"79": {
+				FieldNumber:           79,
+				FieldNumberString:     "79",
+				BenefitType:           "consumable_item",
+				EffectConsumableItems: EffectConsumableItemsSet1,
+			},
+			"80": {
+				FieldNumber:       80,
+				FieldNumberString: "80",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "down",
+					MoveCount:      17,
+					FromCoordinate: 80,
+					ToCoordinate:   97,
+				},
+			},
+			"84": {
+				FieldNumber:       84,
+				FieldNumberString: "84",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "down",
+					MoveCount:      -21,
+					FromCoordinate: 84,
+					ToCoordinate:   63,
+				},
+			},
+			"87": {
+				FieldNumber:       87,
+				FieldNumberString: "87",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "down",
+					MoveCount:      -22,
+					FromCoordinate: 87,
+					ToCoordinate:   65,
+				},
+			},
+			"95": {
+				FieldNumber:       95,
+				FieldNumberString: "95",
+				BenefitType:       "player_move",
+				EffectPlayerMove: model.EffectPlayerMove{
+					Direction:      "down",
+					MoveCount:      -25,
+					FromCoordinate: 95,
+					ToCoordinate:   70,
 				},
 			},
 		},

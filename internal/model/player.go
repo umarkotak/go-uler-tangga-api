@@ -62,9 +62,9 @@ func (p *Player) Init(mapConfig MapConfig, playerConfigs []PlayerConfig) {
 	p.CalculateCurrentPosition(mapConfig, 0)
 }
 
-func (p *Player) CalculateCurrentPosition(mapConfig MapConfig, movingCount int64) int64 {
+func (p *Player) CalculateCurrentPosition(mapConfig MapConfig, movingCount int64) (int64, bool) {
 	if p.IndexPosition == int64(len(mapConfig.Direction)-1) {
-		return 0
+		return 0, true
 	}
 	p.MapPosition = []Position{}
 	for i := 0; i < int(mapConfig.Size); i++ {
@@ -86,5 +86,9 @@ func (p *Player) CalculateCurrentPosition(mapConfig MapConfig, movingCount int64
 		IsHere: true,
 	}
 
-	return movingCount
+	return movingCount, false
+}
+
+func (p *Player) CheckIsWinning(mapConfig MapConfig) bool {
+	return p.IndexPosition == int64(len(mapConfig.Direction)-1)
 }

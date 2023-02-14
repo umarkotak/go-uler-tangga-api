@@ -12,6 +12,8 @@ type MoveResponse struct {
 	NextPlayer  model.Player `json:"next_player"`
 	Number      int64        `json:"number"`
 	IsFoundItem bool         `json:"is_found_item"`
+	Winner      string       `json:"winner"`
+	Winners     []string     `json:"winners"`
 }
 
 func Move(messageContract model.MessageContract) (model.ResponseContract, error) {
@@ -36,7 +38,7 @@ func Move(messageContract model.MessageContract) (model.ResponseContract, error)
 	player.CurrentState = model.STATE_MOVING
 	player.NextState = model.STATE_END_TURN
 	player.MoveAvailable = 0
-	movingCount = player.CalculateCurrentPosition(room.MapConfig, movingCount)
+	movingCount, _ = player.CalculateCurrentPosition(room.MapConfig, movingCount)
 	moveResponse := MoveResponse{
 		Player: player,
 		Number: movingCount,

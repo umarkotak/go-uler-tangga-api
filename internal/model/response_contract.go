@@ -14,5 +14,12 @@ type (
 		From          Identity    `json:"from"`
 		To            Identity    `json:"to"`
 		Data          interface{} `json:"data"`
+		ServerError   ServerError `json:"server_error"`
+	}
+
+	ServerError struct {
+		Code          string `json:"code"`
+		Message       string `json:"message"`
+		CustomMessage string `json:"custom_message"`
 	}
 )

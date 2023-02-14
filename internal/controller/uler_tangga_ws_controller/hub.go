@@ -108,6 +108,7 @@ func (h *Hub) messageRouter(rawMessage []byte) {
 	response := map[string]interface{}{
 		"response_kind": responseContract.ResponseKind,
 		"data":          responseContract.Data,
+		"server_error":  responseContract.ServerError,
 	}
 	responseByte, err := json.Marshal(response)
 	if err != nil {

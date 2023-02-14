@@ -53,11 +53,17 @@ func EndTurn(messageContract model.MessageContract) (model.ResponseContract, err
 		}
 	}
 
-	movingCount = player.CalculateCurrentPosition(room.MapConfig, movingCount)
+	movingCount, winning := player.CalculateCurrentPosition(room.MapConfig, movingCount)
 	moveResponse := MoveResponse{
 		Player:      player,
 		Number:      movingCount,
 		IsFoundItem: isFoundItem,
+	}
+	if winning {
+		moveResponse.Winner = player.Identity.ID
+		player.Winning = true
+		room.Winners = append(room.Winners, moveResponse.Winner)
+		player.WinningPosition = int64(len(room.Winners))
 	}
 	room.PlayerMap[player.Identity.ID] = player
 
